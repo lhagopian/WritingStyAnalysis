@@ -1,0 +1,12 @@
+Package: stylewriter
+Title: Graph word frequency and mean of .txt files to identify the word 
+construct/frequency of that file
+Version: 0.0.0.9000
+Authors@R: person("LeeAnn", "Hagopian", email = "lhagopian@mail.usf.edu", role = "cre")
+Description: This package identifies frequency, mean, and graphing equations 
+to look at the construct of text files. The package can be run on a standard 
+story/article in text format.
+Depends: R (>= 3.4.3)
+License: CCO
+Encoding: UTF-8
+LazyData: true
