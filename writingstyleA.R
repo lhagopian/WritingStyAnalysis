@@ -1,6 +1,5 @@
 text<-"This is a test test, test. test test sentence to? see see if! if, if this - parses and! and and. time cat line five five five five five nicely.  Let's see if it works.  Blah blah blah"
 text<-readLines("Gra.Maga.txt", encoding="UTF-8")
-text<-readLines("lore.txt", encoding="UTF-8")
 
 #calculate word frequency for words in a given text (string), return list with words (Var1) and word frequencies (Freq)
 word.freq<-function(text){
