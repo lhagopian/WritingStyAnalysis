@@ -1,4 +1,4 @@
-# WritingStyAnalysis
+# WritingSty(le)Analysis
 This is a tool allows the user to analyses text (.txt) documents.  The analysis consists of 
 word frequencies (including stopwords, excluding stopwords, only stopwords), punctuation 
 frequencies, average word length (letters), average sentence length (words), and histograms 
