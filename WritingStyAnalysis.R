@@ -1,5 +1,15 @@
-text<-"This is a test test, test. test test sentence to? see see if! if, if this - parses and! and and. time cat line five five five five five nicely.  Let's see if it works.  Blah blah blah"
 text<-readLines("Gra.Maga.txt", encoding="UTF-8")
+
+#' Requred packages:
+install.packages("dplyr")
+
+#' @title word.freq
+#' @description Provides a list of all of the words in the .txt file.
+#' @name word.freq
+#' @param text This should be a text (.txt) file.
+#' @examples 
+#' word.freq(text)
+#' @return a list of word frequencies
 
 #calculate word frequency for words in a given text (string), return list with words (Var1) and word frequencies (Freq)
 word.freq<-function(text){
@@ -8,9 +18,19 @@ word.freq<-function(text){
   txt<-casefold(txt, upper = FALSE)
   w<-strsplit(txt, " ") # sepeates text into individual values - seperated by " "
   w.freq<-as.data.frame(table(unlist(w))) # converts w into a data frame with frequency of words
+  library(dplyr)
   w.freq.s<-arrange(w.freq,desc(Freq)) #orders words
   return(w.freq.s)
 }
+
+
+#' @title punct.freq
+#' @description Provides a list of all of the punctuation in the .txt file.
+#' @name punct.freq
+#' @param text This should be a text (.txt) file.
+#' @examples 
+#' punct.freq(text)
+#' @return a list of punctuation frequencies
 
 #calculate punctuation frequency for punctuations in a given text (string), return list with punctuations and punctuations frequencies
 punct.freq<-function(text){
@@ -18,11 +38,22 @@ punct.freq<-function(text){
   txt<-gsub("[[:space:]]+",' ', txt) # replace double spaces with single space
   w<-strsplit(txt, " ") # sepeates text into individual values - seperated by " "
   w.freq<-as.data.frame(table(unlist(w))) # converts w into a data frame with frequency of words
+  library(dplyr)
   w.freq.s<-arrange(w.freq,desc(Freq)) #orders words
   return(w.freq.s)
 }
 
-#given a list of words and frequencies and a boolean indicating mode, return a list the approriate words and their frequencies
+
+#' @title word.filter
+#' @description Provides a list of all of the words in the .txt file.
+#' @name word.filter
+#' @param w.freq This should be the list of word frequencies (word.freq function).
+#' @param include.sw This is a boolean indicating whether stopwords should be included: TRUE=stopwords removed, FALSE= stopwords only
+#' @examples 
+#' word.freq(w.freq, include.sw=TRUE)
+#' @return a list of the approriate words and their frequencies
+
+#given a list of words and frequencies and a boolean indicating mode, return a list of the approriate words and their frequencies
 # modes: TRUE=stopwords removed, FALSE= stopwords only
 word.filter<-function(w.freq, include.sw=TRUE){
   stopword <- readLines("stopwords.txt", encoding="UTF-8") #imports stopwords from .txt
@@ -35,6 +66,15 @@ word.filter<-function(w.freq, include.sw=TRUE){
   ifelse(include.sw == FALSE, return(remove.sw.f), return(remove.sw.t)) #if FALSE is indicated print only stopwords, else print all other words
 }  
 
+
+#' @title word.avg
+#' @description Provides an average word length of the words in the .txt file.
+#' @name word.avg
+#' @param text This should be a text (.txt) file.
+#' @examples 
+#' word.avg(text)
+#' @return a double indicating the average word length used in the text
+
 #given a text (string), return average word length (double)
 word.avg<-function(text){
   txt<-gsub("[^[:alnum:][:space:]']",'', text) # remove punctuations
@@ -44,6 +84,15 @@ word.avg<-function(text){
   avg<-sum(nchar(words))/length(words)
   return(avg)
 }
+
+
+#' @title sent.avg
+#' @description Provides an average sentence length of the words in the .txt file.
+#' @name sent.avg
+#' @param text This should be a text (.txt) file.
+#' @examples 
+#' sent.avg(text)
+#' @return a double indicating the average sentence length used in the text
 
 #given a text (string), return average sentence length (double)
 sent.avg<-function(text){
@@ -57,6 +106,17 @@ sent.avg<-function(text){
   return(avg) 
 }
 
+
+#' @title word.hist
+#' @description Given a list of words and frequencies, an integer n, and a boolean indicating whether to print the n values, plot a histogram of top n words.
+#' @name word.hist
+#' @param w.freq This should be the list of word frequencies (3 frequency functions).
+#' @param n This indicates the top x most frequently occuring words that will be graphed
+#' @param print.val This indicates whether a list of the top n words should be printed out
+#' @examples 
+#' word.hist(w.freq, 50, TRUE,)
+#' @return a histogram of the top n frequently occuring words in a text (can also return a list of the top n frequently occuring words)
+
 #given a list of words and frequencies, an integer n, and a boolean indicating whether to print the n values, plot a histogram of top n words
 word.hist<-function(w.freq, n=20, print.val=FALSE, title="Word Frequencies in Text"){
   if (n>length(w.freq$Var1)) n<-length(w.freq$Var1) 
@@ -64,7 +124,7 @@ word.hist<-function(w.freq, n=20, print.val=FALSE, title="Word Frequencies in Te
   if (print.val) print(words) #specifies print.val
   num.steps<-10 # number of steps for y-axis
   curr.max<-max(words$Freq)/num.steps #creates current max value for y-axis
-
+  
   div.fac<-0 #dividing factor
   while (curr.max>=10) { # as long as curr.max is greater than or equal to 10
     curr.max<-curr.max/10  #divide curr.max by 10
@@ -82,6 +142,17 @@ word.hist<-function(w.freq, n=20, print.val=FALSE, title="Word Frequencies in Te
                 xlab="Words", ylab="Frequencies", #x and y axis lables
                 main=title) #plot title
 }
+
+
+#' @title punct.hist
+#' @description Given a list of punctuations and frequencies and an integer n, plot a histogram of top n punctuations.
+#' @name punct.hist
+#' @param w.freq This should be the list of punctuations frequencies (frequency function).
+#' @param n This indicates the top x most frequently occuring punctuations that will be graphed
+#' @param print.val This indicates whether a list of the top n punctuations should be printed out
+#' @examples 
+#' punct.hist(p.freq, 50, TRUE,)
+#' @return a histogram of the top n frequently occuring punctuations in a text (can also return a list of the top n frequently occuring words)
 
 #given a list of punctuations and frequencies and an integer n, plot a histogram of top n punctuations
 punct.hist<-function(p.freq, n=20, print.val=FALSE, title="Punctuation Frequencies in Text"){
@@ -108,24 +179,3 @@ punct.hist<-function(p.freq, n=20, print.val=FALSE, title="Punctuation Frequenci
                 xlab="Punctuations", ylab="Frequencies", #x and y axis lables
                 main=title) #plot title
 }
-
-
-
-# store word.freq in a variable (w.freq)
-w.freq<-word.freq(text) 
-# using text calculate punct.freq - store punct.freq in a variable (p.freq)
-p.freq<-punct.freq(text) 
-# using w.freq run word.filter with stopwords removed (TRUE) - store in w.filt.T
-w.filt.T<-word.filter(w.freq, include.sw=TRUE)
-# using w.freq run word.filter with only stopwords (FALSE) - store in w.filt.F
-w.filt.F<-word.filter(w.freq, include.sw=FALSE)
-# using text caluclate average word length
-word.avg(text)
-# using text calcualte average sentence length
-sent.avg(text)
-# using stored variables (w.freq, w.filt.T, w.filt.F) create histogram
-word.hist(w.freq, 50, title="Word Frequencies in Text (all)") 
-word.hist(w.filt.T, 50, title="Word Frequencies in Text (no stopwords)")
-word.hist(w.filt.F, 50, title="Word Frequencies in Text (only stopwords)")
-# using stored variable (p.freq) create histogram
-punct.hist(p.freq) 
